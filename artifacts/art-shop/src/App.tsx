@@ -8,6 +8,9 @@ import NotFound from "@/pages/not-found";
 
 import Home from "@/pages/home";
 import Gallery from "@/pages/gallery";
+import GalleryOriginal from "@/pages/gallery-original";
+import GalleryCommission from "@/pages/gallery-commission";
+import GalleryPrint from "@/pages/gallery-print";
 import ArtworkDetail from "@/pages/artwork-detail";
 import About from "@/pages/about";
 import Contact from "@/pages/contact";
@@ -22,6 +25,9 @@ function Router() {
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/gallery" component={Gallery} />
+          <Route path="/gallery/original" component={GalleryOriginal} />
+          <Route path="/gallery/commission" component={GalleryCommission} />
+          <Route path="/gallery/print" component={GalleryPrint} />
           <Route path="/artwork/:id" component={ArtworkDetail} />
           <Route path="/about" component={About} />
           <Route path="/contact" component={Contact} />
