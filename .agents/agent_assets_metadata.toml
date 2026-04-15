@@ -1,5 +1,4 @@
 uploads = []
-outputs = []
 
 [[generated]]
 id = "Kx-QiYDgSk9tpjg9iymxO"
@@ -66,3 +65,9 @@ id = "rBA2dQXpY_WK3VcboXD8B"
 uri = "file://attached_assets/artwork6.png"
 type = "image"
 title = "floral still life peonies"
+
+[[outputs]]
+id = "P6kV-DrpBJxSqBBdvt905"
+uri = "file://art-shop-project.tar.gz"
+type = "unspecified"
+title = "Art Shop — Source Code"
