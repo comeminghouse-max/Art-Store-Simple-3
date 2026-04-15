@@ -3,13 +3,17 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: API specification for personal art shop
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: artworks
+    description: Artwork operations
+  - name: contact
+    description: Contact operations
 paths:
   /healthz:
     get:
@@ -24,6 +28,125 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /artworks:
+    get:
+      operationId: listArtworks
+      tags: [artworks]
+      summary: List all artworks
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: available
+          schema:
+            type: boolean
+          required: false
+      responses:
+        "200":
+          description: List of artworks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Artwork"
+    post:
+      operationId: createArtwork
+      tags: [artworks]
+      summary: Create a new artwork
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateArtworkBody"
+      responses:
+        "201":
+          description: Artwork created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artwork"
+
+  /artworks/featured:
+    get:
+      operationId: getFeaturedArtworks
+      tags: [artworks]
+      summary: Get featured artworks for homepage
+      responses:
+        "200":
+          description: Featured artworks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Artwork"
+
+  /artworks/categories:
+    get:
+      operationId: listCategories
+      tags: [artworks]
+      summary: List all unique categories
+      responses:
+        "200":
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /artworks/{id}:
+    get:
+      operationId: getArtwork
+      tags: [artworks]
+      summary: Get a single artwork by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Artwork detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artwork"
+        "404":
+          description: Not found
+
+  /contact:
+    post:
+      operationId: sendContactMessage
+      tags: [contact]
+      summary: Send a contact message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactMessageBody"
+      responses:
+        "200":
+          description: Message sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                  - success
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +157,96 @@ components:
       required:
         - status
 
+    Artwork:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        price:
+          type: number
+        imageUrl:
+          type: string
+        available:
+          type: boolean
+        year:
+          type: integer
+        dimensions:
+          type: string
+        medium:
+          type: string
+        featured:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - description
+        - category
+        - price
+        - imageUrl
+        - available
+        - year
+        - dimensions
+        - medium
+        - featured
+        - createdAt
+
+    CreateArtworkBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        price:
+          type: number
+        imageUrl:
+          type: string
+        available:
+          type: boolean
+        year:
+          type: integer
+        dimensions:
+          type: string
+        medium:
+          type: string
+        featured:
+          type: boolean
+      required:
+        - title
+        - description
+        - category
+        - price
+        - imageUrl
+        - available
+        - year
+        - dimensions
+        - medium
+        - featured
+
+    ContactMessageBody:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        subject:
+          type: string
+        message:
+          type: string
+      required:
+        - name
+        - email
+        - subject
+        - message

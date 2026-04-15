@@ -1,0 +1,68 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "Kx-QiYDgSk9tpjg9iymxO"
+uri = "file://artifacts/art-shop/public/images/abstract-1.png"
+type = "image"
+title = "Abstract painting deep blues"
+
+[[generated]]
+id = "o8_HphAsqC8jkI4kFThBG"
+uri = "file://artifacts/art-shop/public/images/landscape-1.png"
+type = "image"
+title = "Impressionist landscape soft greens"
+
+[[generated]]
+id = "Rex1gYNsLbxMQH5Tjd0rI"
+uri = "file://artifacts/art-shop/public/images/abstract-2.png"
+type = "image"
+title = "Abstract landscape warm tones"
+
+[[generated]]
+id = "uwLftQTF2gA_5tMryrSkj"
+uri = "file://artifacts/art-shop/public/images/portrait-1.png"
+type = "image"
+title = "Portrait silhouette charcoal"
+
+[[generated]]
+id = "0pHv0otY5Bxxy08WwUowR"
+uri = "file://artifacts/art-shop/public/images/studio.png"
+type = "image"
+title = "Artist studio workspace"
+
+[[generated]]
+id = "Z67EcuEnMwBcoYjKiWRmH"
+uri = "file://attached_assets/artwork1.png"
+type = "image"
+title = "abstract navy sienna painting"
+
+[[generated]]
+id = "3u2F1PVqbHMhjHoqTHs1f"
+uri = "file://attached_assets/artwork2.png"
+type = "image"
+title = "coastal landscape painting"
+
+[[generated]]
+id = "0AtG2zYyHN0TzTnUyEYc2"
+uri = "file://attached_assets/artwork3.png"
+type = "image"
+title = "portrait woman golden light"
+
+[[generated]]
+id = "b2OhMSno5YT4rUhphjQkE"
+uri = "file://attached_assets/artwork4.png"
+type = "image"
+title = "abstract geometric colorful"
+
+[[generated]]
+id = "XCvIz7yjLoBsVDqsldvsa"
+uri = "file://attached_assets/artwork5.png"
+type = "image"
+title = "dark forest dusk landscape"
+
+[[generated]]
+id = "rBA2dQXpY_WK3VcboXD8B"
+uri = "file://attached_assets/artwork6.png"
+type = "image"
+title = "floral still life peonies"
