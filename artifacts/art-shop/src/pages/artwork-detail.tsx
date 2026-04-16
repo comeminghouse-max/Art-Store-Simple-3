@@ -1,9 +1,64 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "wouter";
 import { useGetArtwork, getGetArtworkQueryKey } from "@workspace/api-client-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import NotFound from "./not-found";
+
+function ImageTransition({ src, alt }: { src: string; alt: string }) {
+  const [displayed, setDisplayed] = useState(src);
+  const [next, setNext] = useState<string | null>(null);
+  const [phase, setPhase] = useState<"idle" | "out" | "in">("idle");
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (src === displayed && phase === "idle") return;
+    if (src === displayed) return;
+
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    setNext(src);
+    setPhase("out");
+
+    timeoutRef.current = setTimeout(() => {
+      setDisplayed(src);
+      setNext(null);
+      setPhase("in");
+
+      timeoutRef.current = setTimeout(() => {
+        setPhase("idle");
+      }, 350);
+    }, 250);
+
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [src]);
+
+  const mainStyle: React.CSSProperties = {
+    transition: "opacity 250ms ease, transform 250ms ease",
+    opacity: phase === "out" ? 0 : 1,
+    transform: phase === "out" ? "scale(1.015)" : phase === "in" ? "scale(1.005)" : "scale(1)",
+  };
+
+  return (
+    <div className="relative w-full h-full">
+      <img
+        src={displayed}
+        alt={alt}
+        style={mainStyle}
+        className="w-full h-auto object-contain max-h-[72vh] block"
+      />
+      {next && phase === "out" && (
+        <img
+          src={next}
+          alt={alt}
+          className="absolute inset-0 w-full h-auto object-contain max-h-[72vh] opacity-0"
+        />
+      )}
+    </div>
+  );
+}
 
 export default function ArtworkDetail() {
   const params = useParams();
@@ -44,7 +99,6 @@ export default function ArtworkDetail() {
 
   const allImages = [artwork.imageUrl, ...(artwork.detailImages || [])];
   const activeImage = allImages[activeIndex] ?? artwork.imageUrl;
-
   const thumbnailLabels = ["Overview", "Framed", "Detail 1", "Detail 2"];
 
   return (
@@ -61,14 +115,9 @@ export default function ArtworkDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start">
           {/* Image Column */}
           <div className="lg:col-span-7 lg:sticky lg:top-32 animate-in fade-in slide-in-from-bottom-8 duration-700">
-            {/* Main image */}
+            {/* Main image with transition */}
             <div className="relative bg-muted overflow-hidden">
-              <img
-                key={activeImage}
-                src={activeImage}
-                alt={artwork.title}
-                className="w-full h-auto object-contain max-h-[72vh] animate-in fade-in duration-300"
-              />
+              <ImageTransition src={activeImage} alt={artwork.title} />
             </div>
 
             {/* Thumbnail strip */}
@@ -77,11 +126,12 @@ export default function ArtworkDetail() {
                 const img = allImages[i] ?? artwork.imageUrl;
                 const isActive = activeIndex === i;
                 const hasRealImage = i < allImages.length;
+
                 return (
                   <button
                     key={i}
                     onClick={() => setActiveIndex(i)}
-                    className={`relative flex-1 aspect-square bg-muted overflow-hidden transition-all duration-200 border-2 ${
+                    className={`relative flex-1 aspect-square bg-muted overflow-hidden transition-all duration-300 border-2 ${
                       isActive
                         ? "border-foreground"
                         : "border-transparent hover:border-foreground/30"
@@ -91,20 +141,22 @@ export default function ArtworkDetail() {
                     <img
                       src={img}
                       alt={`${artwork.title} — ${thumbnailLabels[i]}`}
-                      className={`w-full h-full object-cover transition-opacity duration-200 ${
+                      className={`w-full h-full object-cover transition-all duration-300 ${
                         hasRealImage ? "opacity-100" : "opacity-40"
-                      }`}
+                      } ${isActive ? "scale-105" : "hover:scale-105"}`}
                     />
-                    {/* Label on hover */}
-                    <div className="absolute inset-0 flex items-end justify-center pb-1 opacity-0 hover:opacity-100 transition-opacity bg-black/20">
+                    {/* Hover label */}
+                    <div className="absolute inset-0 flex items-end justify-center pb-1.5 opacity-0 hover:opacity-100 transition-opacity duration-200 bg-black/25">
                       <span className="text-white text-[9px] uppercase tracking-wider font-medium">
                         {thumbnailLabels[i]}
                       </span>
                     </div>
-                    {/* Active indicator */}
-                    {isActive && (
-                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-foreground" />
-                    )}
+                    {/* Active underline */}
+                    <div
+                      className={`absolute bottom-0 left-0 right-0 h-0.5 bg-foreground transition-transform duration-300 origin-left ${
+                        isActive ? "scale-x-100" : "scale-x-0"
+                      }`}
+                    />
                   </button>
                 );
               })}
