@@ -9,6 +9,7 @@ export const artworksTable = pgTable("artworks", {
   category: text("category").notNull(),
   price: numeric("price", { precision: 10, scale: 2 }).notNull(),
   imageUrl: text("image_url").notNull(),
+  detailImages: text("detail_images").notNull().default("[]"),
   available: boolean("available").notNull().default(true),
   year: integer("year").notNull(),
   dimensions: text("dimensions").notNull(),

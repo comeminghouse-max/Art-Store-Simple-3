@@ -13,6 +13,7 @@ export interface Artwork {
   category: string;
   price: number;
   imageUrl: string;
+  detailImages: string[];
   available: boolean;
   year: number;
   dimensions: string;

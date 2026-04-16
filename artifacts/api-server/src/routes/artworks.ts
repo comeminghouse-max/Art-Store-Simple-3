@@ -40,6 +40,7 @@ router.get("/artworks", async (req, res): Promise<void> => {
       result.map((a) => ({
         ...a,
         price: parseFloat(a.price),
+        detailImages: JSON.parse(a.detailImages || "[]"),
       }))
     )
   );
@@ -58,7 +59,7 @@ router.post("/artworks", async (req, res): Promise<void> => {
     .returning();
 
   res.status(201).json(
-    GetArtworkResponse.parse({ ...artwork, price: parseFloat(artwork.price) })
+    GetArtworkResponse.parse({ ...artwork, price: parseFloat(artwork.price), detailImages: JSON.parse(artwork.detailImages || "[]") })
   );
 });
 
@@ -71,7 +72,7 @@ router.get("/artworks/featured", async (_req, res): Promise<void> => {
 
   res.json(
     GetFeaturedArtworksResponse.parse(
-      artworks.map((a) => ({ ...a, price: parseFloat(a.price) }))
+      artworks.map((a) => ({ ...a, price: parseFloat(a.price), detailImages: JSON.parse(a.detailImages || "[]") }))
     )
   );
 });
@@ -102,7 +103,7 @@ router.get("/artworks/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  res.json(GetArtworkResponse.parse({ ...artwork, price: parseFloat(artwork.price) }));
+  res.json(GetArtworkResponse.parse({ ...artwork, price: parseFloat(artwork.price), detailImages: JSON.parse(artwork.detailImages || "[]") }));
 });
 
 export default router;
