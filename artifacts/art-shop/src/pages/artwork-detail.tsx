@@ -4,6 +4,7 @@ import { useGetArtwork, getGetArtworkQueryKey } from "@workspace/api-client-reac
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, ArrowRight, ShoppingBag, Check } from "lucide-react";
 import { useCart } from "@/context/cart-context";
+import { useScrollToTop } from "@/hooks/use-scroll";
 import NotFound from "./not-found";
 
 function ImageTransition({ src, alt }: { src: string; alt: string }) {
@@ -67,6 +68,7 @@ export default function ArtworkDetail() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [addedToCart, setAddedToCart] = useState(false);
   const { addItem, items } = useCart();
+  useScrollToTop();
 
   const { data: artwork, isLoading, isError } = useGetArtwork(id, {
     query: {

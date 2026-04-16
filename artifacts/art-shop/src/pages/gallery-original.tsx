@@ -1,9 +1,11 @@
 import { useListArtworks } from "@workspace/api-client-react";
 import { ArtworkCard } from "@/components/artwork-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useScrollRestoration } from "@/hooks/use-scroll";
 
 export default function GalleryOriginal() {
   const { data: artworks, isLoading } = useListArtworks({ available: true });
+  useScrollRestoration(!isLoading);
 
   return (
     <main className="w-full pt-32 pb-24 px-6 md:px-12 min-h-screen">

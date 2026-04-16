@@ -1,6 +1,7 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import type { Artwork } from "@workspace/api-client-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { saveScrollPosition } from "@/hooks/use-scroll";
 
 interface ArtworkCardProps {
   artwork: Artwork;
@@ -9,8 +10,14 @@ interface ArtworkCardProps {
 }
 
 export function ArtworkCard({ artwork, index = 0, priority = false }: ArtworkCardProps) {
+  const [location] = useLocation();
+
   return (
-    <Link href={`/artwork/${artwork.id}`} className="group block">
+    <Link
+      href={`/artwork/${artwork.id}`}
+      className="group block"
+      onClick={() => saveScrollPosition(location)}
+    >
       <div
         className="relative overflow-hidden bg-muted animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both"
         style={{ animationDelay: `${index * 150}ms` }}

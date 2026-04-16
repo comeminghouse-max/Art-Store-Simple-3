@@ -3,6 +3,7 @@ import { ArtworkCard } from "@/components/artwork-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
+import { useScrollRestoration } from "@/hooks/use-scroll";
 
 const printDetails = [
   { label: "Paper", value: "300gsm fine art matte or cotton rag" },
@@ -14,6 +15,7 @@ const printDetails = [
 
 export default function GalleryPrint() {
   const { data: artworks, isLoading } = useListArtworks();
+  useScrollRestoration(!isLoading);
 
   return (
     <main className="w-full pt-32 pb-24 px-6 md:px-12 min-h-screen">
