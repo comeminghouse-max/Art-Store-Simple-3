@@ -171,7 +171,7 @@ export function Navbar() {
         {/* Mobile Nav */}
         <div
           className={cn(
-            "fixed inset-0 bg-background z-40 flex flex-col items-center justify-center gap-6 transition-opacity duration-300 md:hidden",
+            "fixed inset-0 bg-background z-[49] flex flex-col items-center justify-center gap-6 transition-opacity duration-300 md:hidden",
             mobileMenuOpen
               ? "opacity-100 pointer-events-auto"
               : "opacity-0 pointer-events-none"
