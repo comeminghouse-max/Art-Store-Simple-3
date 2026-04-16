@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "wouter";
 import { useGetArtwork, getGetArtworkQueryKey } from "@workspace/api-client-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ShoppingBag, Check } from "lucide-react";
+import { useCart } from "@/context/cart-context";
 import NotFound from "./not-found";
 
 function ImageTransition({ src, alt }: { src: string; alt: string }) {
@@ -64,6 +65,8 @@ export default function ArtworkDetail() {
   const params = useParams();
   const id = parseInt(params.id || "0", 10);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [addedToCart, setAddedToCart] = useState(false);
+  const { addItem, items } = useCart();
 
   const { data: artwork, isLoading, isError } = useGetArtwork(id, {
     query: {
@@ -204,13 +207,48 @@ export default function ArtworkDetail() {
             </div>
 
             {artwork.available ? (
-              <Link
-                href={`/contact?inquiry=Artwork: ${artwork.title}`}
-                className="w-full py-4 px-6 bg-foreground text-background text-center text-sm uppercase tracking-widest font-medium hover:bg-foreground/90 transition-colors flex items-center justify-center gap-3 group"
-              >
-                Inquire to Purchase
-                <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" strokeWidth={1} />
-              </Link>
+              <div className="space-y-3">
+                <button
+                  onClick={() => {
+                    const alreadyInCart = items.some((i) => i.artworkId === artwork.id);
+                    if (!alreadyInCart) {
+                      addItem({
+                        artworkId: artwork.id,
+                        title: artwork.title,
+                        price: artwork.price,
+                        imageUrl: artwork.imageUrl,
+                        medium: artwork.medium,
+                      });
+                    }
+                    setAddedToCart(true);
+                    setTimeout(() => setAddedToCart(false), 2000);
+                  }}
+                  className={`w-full py-4 px-6 text-center text-sm uppercase tracking-widest font-medium transition-all duration-300 flex items-center justify-center gap-3 ${
+                    addedToCart || items.some((i) => i.artworkId === artwork.id)
+                      ? "bg-green-600 text-white"
+                      : "bg-foreground text-background hover:bg-foreground/90"
+                  }`}
+                >
+                  {addedToCart || items.some((i) => i.artworkId === artwork.id) ? (
+                    <>
+                      <Check size={16} strokeWidth={2} />
+                      Added to Cart
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingBag size={16} strokeWidth={1.5} />
+                      Add to Cart
+                    </>
+                  )}
+                </button>
+                <Link
+                  href={`/contact?inquiry=Artwork: ${artwork.title}`}
+                  className="w-full py-3 px-6 border border-border text-center text-sm uppercase tracking-widest text-muted-foreground hover:text-foreground hover:border-foreground transition-colors flex items-center justify-center gap-3 group"
+                >
+                  Inquire Directly
+                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" strokeWidth={1} />
+                </Link>
+              </div>
             ) : (
               <div className="w-full py-4 px-6 border border-border text-center text-sm uppercase tracking-widest text-muted-foreground">
                 Currently Unavailable
