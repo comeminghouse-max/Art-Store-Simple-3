@@ -35,6 +35,15 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileMenuOpen]);
+
   const handleGalleryEnter = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setGalleryOpen(true);
@@ -47,189 +56,192 @@ export function Navbar() {
   const isGalleryActive = location.startsWith("/gallery");
 
   return (
-    <header
-      className={cn(
-        "fixed top-0 w-full z-50 transition-all duration-500",
-        isScrolled
-          ? "bg-background/90 backdrop-blur-md border-b border-border/50 py-4"
-          : "bg-transparent py-6"
-      )}
-    >
-      <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
-        <Link href="/" className="font-serif text-2xl tracking-tight z-50 relative">
-          STUDIO
-        </Link>
-
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex gap-8 items-center">
-          <Link
-            href="/"
-            className={cn(
-              "text-sm tracking-wide uppercase transition-colors hover:text-foreground/70",
-              location === "/" ? "text-foreground font-medium" : "text-muted-foreground"
-            )}
-          >
-            Home
+    <>
+      <header
+        className={cn(
+          "fixed top-0 w-full z-50 transition-all duration-500",
+          isScrolled
+            ? "bg-background/90 backdrop-blur-md border-b border-border/50 py-4"
+            : "bg-transparent py-6"
+        )}
+      >
+        <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
+          <Link href="/" className="font-serif text-2xl tracking-tight relative z-50">
+            STUDIO
           </Link>
 
-          {/* Gallery with dropdown */}
-          <div
-            ref={galleryRef}
-            className="relative"
-            onMouseEnter={handleGalleryEnter}
-            onMouseLeave={handleGalleryLeave}
-          >
-            <button
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex gap-8 items-center">
+            <Link
+              href="/"
               className={cn(
-                "flex items-center gap-1 text-sm tracking-wide uppercase transition-colors hover:text-foreground/70",
-                isGalleryActive ? "text-foreground font-medium" : "text-muted-foreground"
+                "text-sm tracking-wide uppercase transition-colors hover:text-foreground/70",
+                location === "/" ? "text-foreground font-medium" : "text-muted-foreground"
               )}
             >
-              Gallery
-              <ChevronDown
-                size={14}
-                strokeWidth={1.5}
-                className={cn(
-                  "transition-transform duration-200",
-                  galleryOpen ? "rotate-180" : "rotate-0"
-                )}
-              />
-            </button>
+              Home
+            </Link>
 
-            {/* Dropdown */}
+            {/* Gallery with dropdown */}
             <div
-              className={cn(
-                "absolute top-full left-1/2 -translate-x-1/2 pt-4 transition-all duration-200",
-                galleryOpen
-                  ? "opacity-100 pointer-events-auto translate-y-0"
-                  : "opacity-0 pointer-events-none -translate-y-1"
-              )}
+              ref={galleryRef}
+              className="relative"
+              onMouseEnter={handleGalleryEnter}
+              onMouseLeave={handleGalleryLeave}
             >
-              <div className="bg-background border border-border/60 shadow-lg min-w-[200px] py-2">
-                {galleryItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setGalleryOpen(false)}
-                    className={cn(
-                      "flex flex-col px-5 py-3 hover:bg-muted/60 transition-colors group",
-                      location === item.href && "bg-muted/40"
-                    )}
-                  >
-                    <span
+              <button
+                className={cn(
+                  "flex items-center gap-1 text-sm tracking-wide uppercase transition-colors hover:text-foreground/70",
+                  isGalleryActive ? "text-foreground font-medium" : "text-muted-foreground"
+                )}
+              >
+                Gallery
+                <ChevronDown
+                  size={14}
+                  strokeWidth={1.5}
+                  className={cn(
+                    "transition-transform duration-200",
+                    galleryOpen ? "rotate-180" : "rotate-0"
+                  )}
+                />
+              </button>
+
+              {/* Dropdown */}
+              <div
+                className={cn(
+                  "absolute top-full left-1/2 -translate-x-1/2 pt-4 transition-all duration-200",
+                  galleryOpen
+                    ? "opacity-100 pointer-events-auto translate-y-0"
+                    : "opacity-0 pointer-events-none -translate-y-1"
+                )}
+              >
+                <div className="bg-background border border-border/60 shadow-lg min-w-[200px] py-2">
+                  {galleryItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setGalleryOpen(false)}
                       className={cn(
-                        "text-sm uppercase tracking-widest font-medium transition-colors",
-                        location === item.href
-                          ? "text-foreground"
-                          : "text-foreground group-hover:text-foreground"
+                        "flex flex-col px-5 py-3 hover:bg-muted/60 transition-colors group",
+                        location === item.href && "bg-muted/40"
                       )}
                     >
-                      {item.label}
-                    </span>
-                    <span className="text-xs text-muted-foreground mt-0.5">
-                      {item.description}
-                    </span>
-                  </Link>
-                ))}
+                      <span
+                        className={cn(
+                          "text-sm uppercase tracking-widest font-medium transition-colors",
+                          location === item.href
+                            ? "text-foreground"
+                            : "text-foreground group-hover:text-foreground"
+                        )}
+                      >
+                        {item.label}
+                      </span>
+                      <span className="text-xs text-muted-foreground mt-0.5">
+                        {item.description}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
 
-          <Link
-            href="/about"
-            className={cn(
-              "text-sm tracking-wide uppercase transition-colors hover:text-foreground/70",
-              location === "/about" ? "text-foreground font-medium" : "text-muted-foreground"
-            )}
+            <Link
+              href="/about"
+              className={cn(
+                "text-sm tracking-wide uppercase transition-colors hover:text-foreground/70",
+                location === "/about" ? "text-foreground font-medium" : "text-muted-foreground"
+              )}
+            >
+              About
+            </Link>
+
+            <Link
+              href="/contact"
+              className={cn(
+                "text-sm tracking-wide uppercase transition-colors hover:text-foreground/70",
+                location === "/contact" ? "text-foreground font-medium" : "text-muted-foreground"
+              )}
+            >
+              Contact
+            </Link>
+          </nav>
+
+          {/* Mobile Toggle — always above the overlay */}
+          <button
+            className="md:hidden z-[51] relative text-foreground"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
-            About
-          </Link>
-
-          <Link
-            href="/contact"
-            className={cn(
-              "text-sm tracking-wide uppercase transition-colors hover:text-foreground/70",
-              location === "/contact" ? "text-foreground font-medium" : "text-muted-foreground"
+            {mobileMenuOpen ? (
+              <X size={24} strokeWidth={1} />
+            ) : (
+              <Menu size={24} strokeWidth={1} />
             )}
-          >
-            Contact
-          </Link>
-        </nav>
-
-        {/* Mobile Toggle */}
-        <button
-          className="md:hidden z-50 relative text-foreground"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? (
-            <X size={24} strokeWidth={1} />
-          ) : (
-            <Menu size={24} strokeWidth={1} />
-          )}
-        </button>
-
-        {/* Mobile Nav */}
-        <div
-          className={cn(
-            "fixed inset-0 bg-background z-[49] flex flex-col items-center justify-center gap-6 transition-opacity duration-300 md:hidden",
-            mobileMenuOpen
-              ? "opacity-100 pointer-events-auto"
-              : "opacity-0 pointer-events-none"
-          )}
-        >
-          <Link
-            href="/"
-            onClick={() => setMobileMenuOpen(false)}
-            className={cn(
-              "text-3xl font-serif tracking-tight transition-colors hover:text-foreground/70",
-              location === "/" ? "text-foreground italic" : "text-muted-foreground"
-            )}
-          >
-            Home
-          </Link>
-
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-xl font-serif text-muted-foreground tracking-tight">Gallery</span>
-            <div className="flex flex-col items-center gap-1">
-              {galleryItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={cn(
-                    "text-lg font-serif tracking-tight transition-colors hover:text-foreground/70",
-                    location === item.href ? "text-foreground italic" : "text-muted-foreground"
-                  )}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <Link
-            href="/about"
-            onClick={() => setMobileMenuOpen(false)}
-            className={cn(
-              "text-3xl font-serif tracking-tight transition-colors hover:text-foreground/70",
-              location === "/about" ? "text-foreground italic" : "text-muted-foreground"
-            )}
-          >
-            About
-          </Link>
-
-          <Link
-            href="/contact"
-            onClick={() => setMobileMenuOpen(false)}
-            className={cn(
-              "text-3xl font-serif tracking-tight transition-colors hover:text-foreground/70",
-              location === "/contact" ? "text-foreground italic" : "text-muted-foreground"
-            )}
-          >
-            Contact
-          </Link>
+          </button>
         </div>
+      </header>
+
+      {/* Mobile Nav overlay — outside <header> so backdrop-blur doesn't break fixed positioning */}
+      <div
+        className={cn(
+          "fixed inset-0 bg-background z-[49] flex flex-col items-center justify-center gap-6 transition-opacity duration-300 md:hidden",
+          mobileMenuOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        )}
+      >
+        <Link
+          href="/"
+          onClick={() => setMobileMenuOpen(false)}
+          className={cn(
+            "text-3xl font-serif tracking-tight transition-colors hover:text-foreground/70",
+            location === "/" ? "text-foreground italic" : "text-muted-foreground"
+          )}
+        >
+          Home
+        </Link>
+
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-xl font-serif text-muted-foreground tracking-tight">Gallery</span>
+          <div className="flex flex-col items-center gap-1">
+            {galleryItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={cn(
+                  "text-lg font-serif tracking-tight transition-colors hover:text-foreground/70",
+                  location === item.href ? "text-foreground italic" : "text-muted-foreground"
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <Link
+          href="/about"
+          onClick={() => setMobileMenuOpen(false)}
+          className={cn(
+            "text-3xl font-serif tracking-tight transition-colors hover:text-foreground/70",
+            location === "/about" ? "text-foreground italic" : "text-muted-foreground"
+          )}
+        >
+          About
+        </Link>
+
+        <Link
+          href="/contact"
+          onClick={() => setMobileMenuOpen(false)}
+          className={cn(
+            "text-3xl font-serif tracking-tight transition-colors hover:text-foreground/70",
+            location === "/contact" ? "text-foreground italic" : "text-muted-foreground"
+          )}
+        >
+          Contact
+        </Link>
       </div>
-    </header>
+    </>
   );
 }
