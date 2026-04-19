@@ -10,7 +10,7 @@ const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 export default function FrameDetail() {
   const [, params] = useRoute("/frame/:id");
   const frameId = params?.id ? parseInt(params.id) : 0;
-  const { addToCart, openCart } = useCart();
+  const { addItem, openCart } = useCart();
   
   const [size, setSize] = useState<"A5" | "A4" | "A3">("A4");
   const [quantity, setQuantity] = useState(1);
@@ -40,15 +40,13 @@ export default function FrameDetail() {
   const currentSizeObj = sizes.find(s => s.id === size)!;
 
   const handleAddToCart = () => {
-    addToCart({
+    addItem({
       artworkId: parseInt(`99${frame.id}${size === "A5" ? 5 : size === "A4" ? 4 : 3}`),
       title: `${frame.name} (${size})`,
       price: currentSizeObj.price,
       imageUrl: frame.imageUrl,
-      type: "frame",
-      material: frame.material,
-      quantity: quantity
-    });
+      medium: `Frame — ${frame.material}`,
+    }, quantity);
     setAdded(true);
     openCart();
     setTimeout(() => setAdded(false), 2000);
