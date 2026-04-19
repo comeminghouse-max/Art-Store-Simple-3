@@ -7,11 +7,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Gallery() {
   const [activeCategory, setActiveCategory] = useState<string | undefined>();
   
-  const { data: categories } = useListCategories();
+  const { data: rawCategories } = useListCategories();
+  const categories = Array.isArray(rawCategories) ? rawCategories : [];
   
-  const { data: artworks, isLoading } = useListArtworks(
+  const { data: rawArtworks, isLoading } = useListArtworks(
     activeCategory ? { category: activeCategory } : undefined
   );
+  const artworks = Array.isArray(rawArtworks) ? rawArtworks : [];
 
   return (
     <main className="w-full pt-32 pb-24 px-6 md:px-12 min-h-screen">

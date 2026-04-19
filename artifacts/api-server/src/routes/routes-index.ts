@@ -4,10 +4,6 @@ import artworksRouter from "./artworks";
 import contactRouter from "./contact";
 import ordersRouter from "./orders";
 import cartRouter from "./cart";
-import paymentsRouter from "./payments";
-import paypalRouter from "./paypal";
-import couponsRouter from "./coupons";
-import framesRouter from "./frames";
 
 const router: IRouter = Router();
 
@@ -16,9 +12,5 @@ router.use(artworksRouter);
 router.use(contactRouter);
 router.use(ordersRouter);
 router.use(cartRouter);
-router.use(paymentsRouter);
-router.use(paypalRouter);
-router.use(couponsRouter);
-router.use(framesRouter); 
 
 export default router;

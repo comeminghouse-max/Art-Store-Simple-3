@@ -9,7 +9,6 @@ const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 const galleryItems = [
   { href: "/gallery/original", label: "Original", description: "One-of-a-kind paintings" },
-  { href: "/gallery/commission", label: "Commission", description: "Custom work, made for you" },
   { href: "/gallery/print", label: "Print", description: "Fine art reproduction prints" },
 ];
 
@@ -60,7 +59,7 @@ export function Navbar() {
     timeoutRef.current = setTimeout(() => setGalleryOpen(false), 150);
   };
 
-  const isGalleryActive = location.startsWith("/gallery");
+  const isGalleryActive = location.startsWith("/gallery") && location !== "/gallery/commission";
 
   return (
     <>
@@ -73,8 +72,8 @@ export function Navbar() {
         )}
       >
         <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
-          <Link href="/" className="font-serif text-2xl tracking-tight relative z-50">
-            STUDIO
+          <Link href="/" className="font-serif text-2xl tracking-tight relative z-50 italic">
+            naman.atelier
           </Link>
 
           {/* Desktop Nav */}
@@ -103,14 +102,24 @@ export function Navbar() {
               </div>
             </div>
 
-            <Link href="/about" className={cn("text-sm tracking-wide uppercase transition-colors hover:text-foreground/70", location === "/about" ? "text-foreground font-medium" : "text-muted-foreground")}>
-              About
+            <Link href="/gallery/commission" className={cn("text-sm tracking-wide uppercase transition-colors hover:text-foreground/70", location === "/gallery/commission" ? "text-foreground font-medium" : "text-muted-foreground")}>
+              Commission
             </Link>
+
+            {/* Frames đứng trước Shipping */}
+            <Link href="/frames" className={cn("text-sm tracking-wide uppercase transition-colors hover:text-foreground/70", location === "/frames" ? "text-foreground font-medium" : "text-muted-foreground")}>
+              Frames
+            </Link>
+
+            <Link href="/shipping" className={cn("text-sm tracking-wide uppercase transition-colors hover:text-foreground/70", location === "/shipping" ? "text-foreground font-medium" : "text-muted-foreground")}>
+              Shipping
+            </Link>
+
+            {/* Contact đứng cuối cùng */}
             <Link href="/contact" className={cn("text-sm tracking-wide uppercase transition-colors hover:text-foreground/70", location === "/contact" ? "text-foreground font-medium" : "text-muted-foreground")}>
               Contact
             </Link>
 
-            {/* Cart */}
             <button onClick={openCart} className="relative text-muted-foreground hover:text-foreground transition-colors" aria-label="Open cart">
               <ShoppingBag size={20} strokeWidth={1.5} />
               {count > 0 && (
@@ -120,7 +129,6 @@ export function Navbar() {
               )}
             </button>
 
-            {/* User menu */}
             {isLoaded && (
               <Show when="signed-in">
                 <div ref={userMenuRef} className="relative">
@@ -164,7 +172,6 @@ export function Navbar() {
             )}
           </nav>
 
-          {/* Mobile right side */}
           <div className="flex items-center gap-4 md:hidden z-[51] relative">
             <button onClick={openCart} className="relative text-foreground" aria-label="Open cart">
               <ShoppingBag size={20} strokeWidth={1.5} />
@@ -185,7 +192,6 @@ export function Navbar() {
         </div>
       </header>
 
-      {/* Mobile Nav overlay */}
       <div
         className={cn(
           "fixed inset-0 bg-background z-[49] flex flex-col items-center justify-center gap-6 transition-opacity duration-300 md:hidden",
@@ -196,7 +202,7 @@ export function Navbar() {
           Home
         </Link>
         <div className="flex flex-col items-center gap-2">
-          <span className="text-xl font-serif text-muted-foreground tracking-tight">Gallery</span>
+          <Link href="/gallery" onClick={() => setMobileMenuOpen(false)} className={cn("text-3xl font-serif tracking-tight transition-colors hover:text-foreground/70", isGalleryActive ? "text-foreground italic" : "text-muted-foreground")}>Gallery</Link>
           <div className="flex flex-col items-center gap-1">
             {galleryItems.map((item) => (
               <Link key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}
@@ -206,14 +212,24 @@ export function Navbar() {
             ))}
           </div>
         </div>
-        <Link href="/about" onClick={() => setMobileMenuOpen(false)} className={cn("text-3xl font-serif tracking-tight transition-colors hover:text-foreground/70", location === "/about" ? "text-foreground italic" : "text-muted-foreground")}>
-          About
+
+        <Link href="/gallery/commission" onClick={() => setMobileMenuOpen(false)} className={cn("text-3xl font-serif tracking-tight transition-colors hover:text-foreground/70", location === "/gallery/commission" ? "text-foreground italic" : "text-muted-foreground")}>
+          Commission
         </Link>
+
+        {/* Mobile: Frames đứng trước Shipping */}
+        <Link href="/frames" onClick={() => setMobileMenuOpen(false)} className={cn("text-3xl font-serif tracking-tight transition-colors hover:text-foreground/70", location === "/frames" ? "text-foreground italic" : "text-muted-foreground")}>
+          Frames
+        </Link>
+
+        <Link href="/shipping" onClick={() => setMobileMenuOpen(false)} className={cn("text-3xl font-serif tracking-tight transition-colors hover:text-foreground/70", location === "/shipping" ? "text-foreground italic" : "text-muted-foreground")}>
+          Shipping
+        </Link>
+
         <Link href="/contact" onClick={() => setMobileMenuOpen(false)} className={cn("text-3xl font-serif tracking-tight transition-colors hover:text-foreground/70", location === "/contact" ? "text-foreground italic" : "text-muted-foreground")}>
           Contact
         </Link>
 
-        {/* Mobile auth */}
         <Show when="signed-out">
           <Link href="/sign-in" onClick={() => setMobileMenuOpen(false)}
             className="flex items-center gap-2 text-xl font-serif text-muted-foreground hover:text-foreground transition-colors">

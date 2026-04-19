@@ -1,16 +1,15 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import pg from "pg";
+import { Pool } from "pg";
 import * as schema from "./schema";
 
-const { Pool } = pg;
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
 
-if (!process.env.DATABASE_URL) {
-  throw new Error(
-    "DATABASE_URL must be set. Did you forget to provision a database?",
-  );
-}
-
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 export const db = drizzle(pool, { schema });
 
+// Export tất cả tables từ schema/
 export * from "./schema";
+
+// Export carts table (thêm mới)
+export * from "./carts";

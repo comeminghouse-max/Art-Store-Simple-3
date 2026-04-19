@@ -5,7 +5,6 @@ import { ClerkProvider, SignIn, SignUp, useClerk } from "@clerk/react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
 import { CartProvider } from "@/context/cart-context";
 import { CartDrawer } from "@/components/cart-drawer";
 import NotFound from "@/pages/not-found";
@@ -16,9 +15,12 @@ import GalleryOriginal from "@/pages/gallery-original";
 import GalleryCommission from "@/pages/gallery-commission";
 import GalleryPrint from "@/pages/gallery-print";
 import ArtworkDetail from "@/pages/artwork-detail";
-import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Checkout from "@/pages/checkout";
+import Shipping from "@/pages/shipping";
+import Frames from "@/pages/frames"; // Thêm dòng này để gọi file frames
+import Admin from "@/pages/admin";
+import FrameDetail from "@/pages/frame-detail";
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
@@ -54,8 +56,6 @@ function ClerkQueryClientCacheInvalidator() {
 }
 
 function SignInPage() {
-  // To update login providers, app branding, or OAuth settings use the Auth
-  // pane in the workspace toolbar. More information can be found in the Replit docs.
   return (
     <main className="min-h-screen flex items-center justify-center pt-24 pb-16 px-6">
       <SignIn routing="path" path={`${basePath}/sign-in`} signUpUrl={`${basePath}/sign-up`} />
@@ -64,8 +64,6 @@ function SignInPage() {
 }
 
 function SignUpPage() {
-  // To update login providers, app branding, or OAuth settings use the Auth
-  // pane in the workspace toolbar. More information can be found in the Replit docs.
   return (
     <main className="min-h-screen flex items-center justify-center pt-24 pb-16 px-6">
       <SignUp routing="path" path={`${basePath}/sign-up`} signInUrl={`${basePath}/sign-in`} />
@@ -76,6 +74,17 @@ function SignUpPage() {
 const queryClient = new QueryClient();
 
 function Router() {
+  const [location] = useLocation();
+  const isAdmin = location.startsWith("/admin");
+
+  if (isAdmin) {
+    return (
+      <Switch>
+        <Route path="/admin" component={Admin} />
+      </Switch>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -88,15 +97,16 @@ function Router() {
           <Route path="/gallery/commission" component={GalleryCommission} />
           <Route path="/gallery/print" component={GalleryPrint} />
           <Route path="/artwork/:id" component={ArtworkDetail} />
-          <Route path="/about" component={About} />
           <Route path="/contact" component={Contact} />
+          <Route path="/shipping" component={Shipping} />
+          <Route path="/frames" component={Frames} /> {/* Thêm route cho frames */}
+<Route path="/frame/:id" component={FrameDetail} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/sign-in/*?" component={SignInPage} />
           <Route path="/sign-up/*?" component={SignUpPage} />
           <Route component={NotFound} />
         </Switch>
       </div>
-      <Footer />
     </div>
   );
 }

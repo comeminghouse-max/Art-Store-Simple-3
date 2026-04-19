@@ -4,8 +4,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useScrollRestoration } from "@/hooks/use-scroll";
 
 export default function GalleryOriginal() {
-  const { data: artworks, isLoading } = useListArtworks({ available: true });
-  useScrollRestoration(!isLoading);
+  const { data: rawArtworks, isLoading } = useListArtworks({ available: true });
+  const artworks = (Array.isArray(rawArtworks) ? rawArtworks : []).filter(a => a.category !== "print");
+  useScrollRestoration(!isLoading && artworks.length > 0);
 
   return (
     <main className="w-full pt-32 pb-24 px-6 md:px-12 min-h-screen">
@@ -18,9 +19,9 @@ export default function GalleryOriginal() {
           </p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-14">
           {isLoading ? (
-            Array.from({ length: 6 }).map((_, i) => (
+            Array.from({ length: 8 }).map((_, i) => (
               <div key={i} className="space-y-4">
                 <Skeleton className="w-full aspect-[3/4] rounded-none" />
                 <Skeleton className="w-2/3 h-6" />
