@@ -122,10 +122,11 @@ const statusBadge = (s: string, t: Theme) => {
 };
 
 const HIDDEN_STATUSES = ["removed", "pending", "cart"];
+// "removed" bị ẩn hoàn toàn, không xuất hiện trong dropdown
 const STATUS_CFG: Record<string,{label:string}> = {
   paid:{label:"✓ Đã thanh toán"}, shipped:{label:"🚚 Đã giao"},
   pending:{label:"⏳ Chờ xử lý"}, cart:{label:"🛒 Giỏ hàng"},
-  cancelled:{label:"✕ Đã hủy"}, removed:{label:"🗑 Đã xóa"},
+  cancelled:{label:"✕ Đã hủy"},
 };
 
 // ── Login ─────────────────────────────────────────────────────────────────────
@@ -202,7 +203,8 @@ function BentoDashboard({T,qc,onLogout,darkMode,toggleDark}:{T:typeof LIGHT;qc:a
   const cleanOrders=rawOrders.filter(o=>!HIDDEN_STATUSES.includes(o.status));
 
   const filteredOrders=useMemo(()=>{
-    let list=showHidden?[...rawOrders]:[...cleanOrders];
+    // Luôn ẩn "removed" hoàn toàn, không bao giờ hiện dù showHidden = true
+    let list=showHidden?rawOrders.filter(o=>o.status!=="removed"):[...cleanOrders];
     if(orderFilter!=="all")list=list.filter(o=>o.status===orderFilter);
     if(search.trim()){const q=search.toLowerCase();list=list.filter(o=>o.customerName?.toLowerCase().includes(q)||o.customerEmail?.toLowerCase().includes(q)||String(o.id).includes(q));}
     return list.sort((a,b)=>new Date(b.createdAt).getTime()-new Date(a.createdAt).getTime());
