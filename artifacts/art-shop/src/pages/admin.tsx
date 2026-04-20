@@ -48,14 +48,14 @@ const emptyFrame: Omit<Frame,"id"> = {
 };
 
 const LIGHT = {
-  bg:"#968774", surface:"#F0EDE8", card:"#FFFFFF", cardAlt:"#FAFAF8",
+  bg:"#F7F4F0", surface:"#F0EDE8", card:"#FFFFFF", cardAlt:"#FAFAF8",
   ink:"#1A1A1A", inkMid:"#555555", inkLight:"#9A9A9A", accentSoft:"#F5F2EE",
   border:"#EDEBE7", inputBg:"#FFFFFF", inputBorder:"#E2DED9",
-  sidebarBg:"#000000", sidebarActive:"rgba(255,255,255,0.1)",
+  sidebarBg:"#111111", sidebarActive:"rgba(255,255,255,0.1)",
   green:"#E3F9E5", greenInk:"#1A6B24", red:"#FDE8E8", redInk:"#8B1F1F",
   amber:"#FEF6E0", amberInk:"#8A5200", blue:"#E6F0FD", blueInk:"#1A3A7A",
   purple:"#F0ECFE", purpleInk:"#4A1D96",
-  shadow:"0 2px 20px rgba(0,0,0,0.055)", shadowHover:"0 8px 36px rgba(255, 255, 255, 0.11)",
+  shadow:"0 2px 20px rgba(0,0,0,0.055)", shadowHover:"0 8px 36px rgba(0,0,0,0.11)",
   radius:"28px", radiusSm:"16px", radiusXs:"10px",
   font:"'DM Sans','Outfit',system-ui,sans-serif", isDark: false,
 };
