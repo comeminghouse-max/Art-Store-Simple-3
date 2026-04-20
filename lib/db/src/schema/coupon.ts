@@ -3,8 +3,9 @@ import { pgTable, text, serial, timestamp, numeric, integer, boolean } from "dri
 export const couponsTable = pgTable("coupons", {
   id: serial("id").primaryKey(),
   code: text("code").notNull().unique(),
-  discountType: text("discount_type").notNull().default("percent"), // 'percent' | 'fixed'
+  discountType: text("discount_type").notNull().default("percent"),
   discountValue: numeric("discount_value", { precision: 10, scale: 2 }).notNull(),
+  minOrderAmount: numeric("min_order_amount", { precision: 10, scale: 2 }).notNull().default("0"),
   maxUses: integer("max_uses").notNull().default(1),
   usedCount: integer("used_count").notNull().default(0),
   startsAt: timestamp("starts_at", { withTimezone: true }),
