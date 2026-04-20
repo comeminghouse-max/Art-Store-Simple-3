@@ -715,7 +715,7 @@ function CouponsPanel({T,API,qc}:{T:typeof LIGHT;API:string;qc:any}) {
   const [formError, setFormError] = useState("");
   const lbl=(text:string)=><p style={{fontSize:11,fontWeight:600,color:T.inkLight,textTransform:"uppercase" as const,letterSpacing:".05em",marginBottom:6}}>{text}</p>;
 
-  const {data:coupons=[],isLoading}=useQuery<Coupon[]>({queryKey:["admin-coupons"],queryFn:async()=>{const r=await fetch(`${API}/api/coupons`);return r.json();}});
+  const {data:coupons=[],isLoading}=useQuery<Coupon[]>({queryKey:["admin-coupons"],queryFn:async()=>{try{const r=await fetch(`${API}/api/coupons`);if(!r.ok)return[];const d=await r.json();return Array.isArray(d)?d:[];}catch{return[];}}});
   const createMut=useMutation({
     mutationFn:async(body:any)=>{const r=await fetch(`${API}/api/coupons`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});if(!r.ok){const e=await r.json();throw new Error(e.error||"Lỗi");}return r.json();},
     onSuccess:()=>{qc.invalidateQueries({queryKey:["admin-coupons"]});setShowForm(false);setNewC({code:"",discountType:"percent",discountValue:10,minOrderAmount:0,maxUses:100,startsAt:"",expiresAt:""});},
