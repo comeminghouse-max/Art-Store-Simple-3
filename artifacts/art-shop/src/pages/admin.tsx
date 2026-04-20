@@ -48,7 +48,7 @@ const emptyFrame: Omit<Frame,"id"> = {
 };
 
 const LIGHT = {
-  bg:"#F7F4F0", surface:"#F0EDE8", card:"#FFFFFF", cardAlt:"#FAFAF8",
+  bg:"#968774", surface:"#F0EDE8", card:"#FFFFFF", cardAlt:"#FAFAF8",
   ink:"#1A1A1A", inkMid:"#555555", inkLight:"#9A9A9A", accentSoft:"#F5F2EE",
   border:"#EDEBE7", inputBg:"#FFFFFF", inputBorder:"#E2DED9",
   sidebarBg:"#000000", sidebarActive:"rgba(255,255,255,0.1)",
