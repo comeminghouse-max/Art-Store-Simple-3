@@ -44,7 +44,8 @@ function usePayPalScript(clientId: string) {
     if (!clientId) return;
     if ((window as any).paypal) { setLoaded(true); return; }
     const script = document.createElement("script");
-    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD&intent=capture&components=buttons&enable-funding=card&disable-funding=venmo,paylater`;
+    // FIX 1: thêm locale=en_US để hiển thị tiếng Anh
+    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD&intent=capture&components=buttons&enable-funding=card&disable-funding=venmo,paylater&locale=en_US`;
     script.setAttribute("data-namespace","paypal_sdk");
     script.async = true;
     script.onload = () => setLoaded(true);
@@ -127,7 +128,7 @@ export default function Checkout() {
       artworkId: i.artworkId,
       title: i.title,
       price: safeNum(i.price),
-      imageUrl: i.imageUrl,   // ← đảm bảo có đầy đủ
+      imageUrl: i.imageUrl,
       medium: i.medium,
       quantity: safeNum(i.quantity) || 1,
     }));
@@ -173,7 +174,7 @@ export default function Checkout() {
     try {
       const newOrderId = await createOrder();
       setOrderId(newOrderId);
-      setPendingOrderId(newOrderId); // ← lưu vào cart-context + sessionStorage
+      setPendingOrderId(newOrderId);
       setStep("payment");
     } catch (err: any) {
       setError(err.message || "Something went wrong.");
@@ -189,7 +190,8 @@ export default function Checkout() {
     paypalRendered.current = true;
 
     paypal.Buttons({
-      style: { layout:"vertical",color:"gold",shape:"rect",label:"pay",height:48,tagline:false },
+      // FIX 2: dùng label:"paypal" để logo hiển thị đúng, không bị đè chữ
+      style: { layout:"vertical", color:"gold", shape:"rect", label:"paypal", height:48, tagline:false },
 
       onClick: (_data: any, actions: any) => { startLoader(); return actions.resolve(); },
 
@@ -235,7 +237,7 @@ export default function Checkout() {
           }
 
           setPayerEmail(form.email);
-          clearCart(); // ← cũng xóa pendingOrderId
+          clearCart();
           setPpLoading(false);
           setStep("success");
         } catch (err: any) {
@@ -274,7 +276,7 @@ export default function Checkout() {
           <CheckCircle size={56} strokeWidth={0.75} className="mx-auto mb-6 text-green-500" />
           <h1 className="font-serif text-4xl mb-4">Payment Successful!</h1>
           <p className="text-muted-foreground font-light mb-2">Thank you for your order.</p>
-          {appliedCoupon && <p className="text-green-400 text-sm mb-2">Đã áp dụng mã {appliedCoupon.code} — giảm ${appliedCoupon.discount.toLocaleString()}</p>}
+          {appliedCoupon && <p className="text-green-400 text-sm mb-2">Applied code {appliedCoupon.code} — saved ${appliedCoupon.discount.toLocaleString()}</p>}
           <p className="text-muted-foreground text-sm mb-10">Confirmation sent to <span className="font-medium text-foreground">{payerEmail||form.email}</span></p>
           <Link href="/" className="inline-flex items-center gap-2 text-sm uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors border-b border-muted-foreground/30 pb-0.5">Return home</Link>
         </div>
@@ -354,14 +356,6 @@ export default function Checkout() {
               {[{label:"PayPal",cls:"text-blue-500 border-blue-500/30"},{label:"VISA",cls:"text-blue-400 border-blue-400/30"},{label:"Mastercard",cls:"text-red-500 border-red-500/30"},{label:"Amex",cls:"text-blue-300 border-blue-300/30"}]
                 .map(c=><span key={c.label} className={`text-[10px] border px-1.5 py-0.5 ${c.cls}`}>{c.label}</span>)}
             </div>
-
-            {import.meta.env.DEV && (
-              <div className="mt-6 p-4 border border-amber-500/30 bg-amber-500/5 text-xs text-amber-400 space-y-1">
-                <p className="font-semibold uppercase tracking-wider mb-2">🧪 Sandbox Test Card</p>
-                <p>Card: <span className="font-mono">4032039534213337</span></p>
-                <p>Expiry: <span className="font-mono">12/2030</span> · CVV: <span className="font-mono">123</span></p>
-              </div>
-            )}
           </div>
 
           {/* Form / Payment */}
@@ -453,7 +447,10 @@ export default function Checkout() {
 
                 {!paypalLoaded
                   ? <div className="flex items-center gap-3 text-muted-foreground py-8"><Loader2 size={20} className="animate-spin"/><span className="text-sm">Loading PayPal…</span></div>
-                  : <div ref={paypalContainerRef} className="min-h-[120px]"/>
+                  : (
+                    // FIX 3: thêm space-y-3 để tạo khoảng cách giữa các nút PayPal
+                    <div ref={paypalContainerRef} className="min-h-[120px] [&_.paypal-buttons]:!gap-3 [&_.paypal-buttons-context-iframe]:!mb-3"/>
+                  )
                 }
                 {error && <div className="border border-red-500/30 bg-red-500/5 px-4 py-3 text-red-400 text-sm mt-4">{error}</div>}
 
