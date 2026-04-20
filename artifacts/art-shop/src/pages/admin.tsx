@@ -51,11 +51,11 @@ const LIGHT = {
   bg:"#F7F4F0", surface:"#F0EDE8", card:"#FFFFFF", cardAlt:"#FAFAF8",
   ink:"#1A1A1A", inkMid:"#555555", inkLight:"#9A9A9A", accentSoft:"#F5F2EE",
   border:"#EDEBE7", inputBg:"#FFFFFF", inputBorder:"#E2DED9",
-  sidebarBg:"#111111", sidebarActive:"rgba(255,255,255,0.1)",
+  sidebarBg:"#000000", sidebarActive:"rgba(255,255,255,0.1)",
   green:"#E3F9E5", greenInk:"#1A6B24", red:"#FDE8E8", redInk:"#8B1F1F",
   amber:"#FEF6E0", amberInk:"#8A5200", blue:"#E6F0FD", blueInk:"#1A3A7A",
   purple:"#F0ECFE", purpleInk:"#4A1D96",
-  shadow:"0 2px 20px rgba(0,0,0,0.055)", shadowHover:"0 8px 36px rgba(0,0,0,0.11)",
+  shadow:"0 2px 20px rgba(0,0,0,0.055)", shadowHover:"0 8px 36px rgba(255, 255, 255, 0.11)",
   radius:"28px", radiusSm:"16px", radiusXs:"10px",
   font:"'DM Sans','Outfit',system-ui,sans-serif", isDark: false,
 };
@@ -333,9 +333,9 @@ function BentoDashboard({T,qc,onLogout,darkMode,toggleDark}:{T:typeof LIGHT;qc:a
               </div>
               <div style={{display:"flex",flexDirection:"column",gap:12}}>
                 {([
-                  {emoji:"✦",label:"Thêm tranh gốc",sub:"Upload tác phẩm mới",action:()=>{setPage("original");openAdd(false);},bg:T.ink,c:"#fff",subC:"rgba(255,255,255,0.5)"},
-                  {emoji:"▣",label:"Thêm bản in",sub:"Fine Art Print",action:()=>{setPage("print");openAdd(true);},bg:T.isDark?"#1A1A1A":"#F7F5F2",c:T.ink,subC:T.inkLight},
-                  {emoji:"🖼",label:"Khung tranh",sub:"Thêm & quản lý khung",action:()=>setPage("frames"),bg:T.isDark?"#1A1A1A":"#F7F5F2",c:T.ink,subC:T.inkLight},
+                  {emoji:"✦",label:"Thêm tranh gốc",sub:"Upload tác phẩm mới",action:()=>{setPage("original");openAdd(false);},bg:T.surface,c:T.ink,subC:T.inkLight},
+                  {emoji:"▣",label:"Thêm bản in",sub:"Fine Art Print",action:()=>{setPage("print");openAdd(true);},bg:T.surface,c:T.ink,subC:T.inkLight},
+                  {emoji:"🖼",label:"Khung tranh",sub:"Thêm & quản lý khung",action:()=>setPage("frames"),bg:T.surface,c:T.ink,subC:T.inkLight},
                   {emoji:"◎",label:"Đơn hàng",sub:`${paidOrders} cần xử lý`,action:()=>setPage("orders"),bg:T.isDark?"#0D2A4A":"#DBEAFE",c:T.isDark?"#93C5FD":"#1D4ED8",subC:T.isDark?"#60A5FA":"#3B82F6"},
                 ] as any[]).map((a,i)=>(
                   <button key={i} onClick={a.action} className="bento-hover"
