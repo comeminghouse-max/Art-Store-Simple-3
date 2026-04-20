@@ -8,6 +8,7 @@ import { Navbar } from "@/components/navbar";
 import { CartProvider } from "@/context/cart-context";
 import { CartDrawer } from "@/components/cart-drawer";
 import NotFound from "@/pages/not-found";
+import { setBaseUrl } from "@workspace/api-client-react";
 
 import Home from "@/pages/home";
 import Gallery from "@/pages/gallery";
@@ -18,13 +19,16 @@ import ArtworkDetail from "@/pages/artwork-detail";
 import Contact from "@/pages/contact";
 import Checkout from "@/pages/checkout";
 import Shipping from "@/pages/shipping";
-import Frames from "@/pages/frames"; // Thêm dòng này để gọi file frames
+import Frames from "@/pages/frames";
 import Admin from "@/pages/admin";
 import FrameDetail from "@/pages/frame-detail";
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+// Set API base URL cho tất cả api-client calls
+setBaseUrl(import.meta.env.VITE_API_URL || "http://localhost:3000");
 
 if (!clerkPubKey) {
   throw new Error("Missing VITE_CLERK_PUBLISHABLE_KEY");
@@ -99,8 +103,8 @@ function Router() {
           <Route path="/artwork/:id" component={ArtworkDetail} />
           <Route path="/contact" component={Contact} />
           <Route path="/shipping" component={Shipping} />
-          <Route path="/frames" component={Frames} /> {/* Thêm route cho frames */}
-<Route path="/frame/:id" component={FrameDetail} />
+          <Route path="/frames" component={Frames} />
+          <Route path="/frame/:id" component={FrameDetail} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/sign-in/*?" component={SignInPage} />
           <Route path="/sign-up/*?" component={SignUpPage} />
